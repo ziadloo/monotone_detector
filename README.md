@@ -99,3 +99,10 @@ And if you want to run it from SSH, for a long period of time to detect and log 
 ```
 nohup ./monotone_detector --no-gui >> ./monotone.log 2>> ./error.log &
 ```
+
+# DISCLAIMER
+
+There are source code within this repo borrowed from these projects:
+
+ * https://github.com/cameron314/readerwriterqueue
+ * https://github.com/adamstark/AudioFile

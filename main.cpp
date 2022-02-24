@@ -5,7 +5,7 @@
 #include <csignal>
 #include <unistd.h>
 #include <algorithm>
-#include "lib/readerwriterqueue.h"
+#include "lib/queue/readerwriterqueue.h"
 #include "utility.h"
 #include "pc/producer.h"
 #include "pc/consumer.h"

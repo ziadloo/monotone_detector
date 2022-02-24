@@ -10,7 +10,7 @@
 #include <vector>
 #include <thread>
 #include "../utility.h"
-#include "../lib/readerwriterqueue.h"
+#include "lib/queue/readerwriterqueue.h"
 
 using std::vector;
 using namespace moodycamel;

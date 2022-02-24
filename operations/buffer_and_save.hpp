@@ -14,7 +14,7 @@
 #include <numeric>
 #include <iostream>
 #include "./raw_operation.h"
-#include "../lib/AudioFile.h"
+#include "lib/AudioFile/AudioFile.h"
 #include "../utility.h"
 
 using namespace std;

@@ -8,7 +8,7 @@
 #include <vector>
 #include <functional>
 #include <fftw3.h>
-#include "../lib/readerwriterqueue.h"
+#include "lib/queue/readerwriterqueue.h"
 #include "../utility.h"
 #include "task.h"
 #include "../operations/operation.h"
