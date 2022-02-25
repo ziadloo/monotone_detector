@@ -14,7 +14,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 add_executable(monotone_detector main.cpp
-        PlotTimer.hpp
+        FrequencyPlotter.hpp
         pc/producer.cpp
         pc/producer.h
         pc/consumer.cpp

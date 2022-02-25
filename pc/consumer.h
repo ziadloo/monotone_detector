@@ -26,8 +26,8 @@ public:
     double smooth_signal(double arr[]) const;
     void stop() override;
 
-    std::vector<std::shared_ptr<operation>> operations;
-    std::vector<std::shared_ptr<raw_operation>> raw_operations;
+    std::vector<operation*> operations;
+    std::vector<raw_operation*> raw_operations;
 
 protected:
     void thread_code() override;

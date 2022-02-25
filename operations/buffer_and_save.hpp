@@ -20,6 +20,7 @@
 using namespace std;
 
 class buffer_and_save: public raw_operation {
+Q_OBJECT
 public:
     void start_recording(vector<double> _noises) {
         recording = true;
@@ -77,6 +78,24 @@ protected:
                 copy(begin(sample_history), end(sample_history), back_inserter(sample_buffer));
             }
             sample_history.clear();
+        }
+    }
+    bool noise_detected = false;
+    vector<double> _noises;
+
+public slots:
+    void set_vectors(vector_double spectrum, vector_double similarity, vector_double noises) {
+        if (noises.size() > 0 && !noise_detected) {
+            noise_detected = true;
+            start_recording(noises);
+            _noises = noises;
+        }
+        else if (noises.size() == 0 && noise_detected) {
+            noise_detected = false;
+            stop_recording(_noises);
+        }
+        else if (noises.size() > 0) {
+            _noises = noises;
         }
     }
 };

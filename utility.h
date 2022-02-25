@@ -5,6 +5,8 @@
 #ifndef ARECORD_UTILITY_H
 #define ARECORD_UTILITY_H
 
+#include <vector>
+
 #define _REAL_ 0
 #define _IMAG_ 1
 #define _SAMPLE_RATE_ 44100
@@ -25,6 +27,7 @@
 #define _INERTIA_DELTA_ 1.0/100.0
 
 typedef short format;
+typedef std::vector<double> vector_double;
 
 
 #endif //ARECORD_UTILITY_H

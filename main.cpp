@@ -1,5 +1,5 @@
 #include <QApplication>
-#include "PlotTimer.hpp"
+#include "FrequencyPlotter.hpp"
 
 #include <iostream>
 #include <csignal>
@@ -22,52 +22,35 @@ typedef std::chrono::duration<float> fsec;
 shared_ptr<producer> producer_pointer;
 shared_ptr<consumer> consumer_pointer;
 
+
 int main( int argc, char* argv[] )
 {
-    //Capturing audio (1 sec at a time)
-    producer_pointer = make_shared<producer>(_SAMPLE_RATE_);
+    qRegisterMetaType<vector_double>("vector_double");
 
-    //Processing the audio segments
+    producer_pointer = make_shared<producer>(_SAMPLE_RATE_);
     consumer_pointer = make_shared<consumer>(producer_pointer, _SAMPLE_RATE_, _NUM_POINTS_, _SAMPLES_PER_FRAME_,
                                              _SMOOTH_WINDOW_SIZE_);
 
-    auto detector = make_shared<noise_detector>(_NUM_POINTS_);
-    auto saver = make_shared<buffer_and_save>();
+    auto detector = noise_detector(_NUM_POINTS_);
+    auto saver = buffer_and_save();
 
-    consumer_pointer->operations.emplace_back(detector);
-    consumer_pointer->raw_operations.emplace_back(saver);
+    consumer_pointer->operations.emplace_back(&detector);
+    consumer_pointer->raw_operations.emplace_back(&saver);
 
     consumer_pointer->run();
     producer_pointer->run();
 
-    detector->on_new_sample.emplace_back([&](vector<double> spectrum, vector<double> similarity, vector<double> noises) mutable {
-        static bool noise_detected = false;
-        static vector<double> _noises;
-        if (noises.size() > 0 && !noise_detected) {
-            noise_detected = true;
-            saver->start_recording(noises);
-            _noises = noises;
-        }
-        else if (noises.size() == 0 && noise_detected) {
-            noise_detected = false;
-            saver->stop_recording(_noises);
-        }
-        else if (noises.size() > 0) {
-            _noises = noises;
-        }
-    });
+    QObject::connect(&detector, SIGNAL(onNewSample(vector_double, vector_double, vector_double)), &saver, SLOT(set_vectors(vector_double, vector_double, vector_double)));
 
     int r = 0;
     if (argc == 1 || string(argv[1]) != "--no-gui") {
         QApplication app( argc, argv );
 
-        PlotTimer timer;
+        FrequencyPlotter plotter;
 
-        detector->on_new_sample.emplace_back([&](vector<double> spectrum, vector<double> similarity, vector<double> noises) mutable {
-            timer.set_vectors(spectrum, similarity, noises);
-        });
+        QObject::connect(&detector, SIGNAL(onNewSample(vector_double, vector_double, vector_double)), &plotter, SLOT(set_vectors(vector_double, vector_double, vector_double)));
 
-        timer.show();
+        plotter.show();
 
         r = app.exec();
 

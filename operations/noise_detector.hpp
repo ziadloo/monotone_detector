@@ -21,6 +21,7 @@
 using namespace std;
 
 class noise_detector: public operation {
+Q_OBJECT
 public:
     noise_detector(int sample_count): operation(sample_count) {
         for (size_t i=0; i < sample_count/2; i++) {
@@ -50,7 +51,9 @@ public:
             noise[i] = false;
         }
     }
-    vector<std::function<void (vector<double> spectrum, vector<double> similarity, vector<double> noises)>> on_new_sample;
+
+signals:
+    void onNewSample(vector_double spectrum, vector_double similarity, vector_double noises);
 
 protected:
     vector<double> reference;
@@ -122,9 +125,7 @@ protected:
             noise_bars.emplace_back(static_cast<double>(noise.size()+noise_start) / (_NUM_POINTS_/2.0) * (_SAMPLE_RATE_/2.0));
         }
 
-        for (auto callback : on_new_sample) {
-            callback(average, similarity, noise_bars);
-        }
+        emit onNewSample(average, similarity, noise_bars);
     }
 
     vector<double> calculateSimilarity(vector<double> signal) {

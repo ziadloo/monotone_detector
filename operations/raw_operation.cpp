@@ -8,17 +8,19 @@
 #include <iostream>
 
 raw_operation::raw_operation() {
-    process_runner = std::make_unique<std::thread>([&]() {
-        while (!EXIT) {
-            signal_ready.acquire();
-            if (EXIT) {
-                break;
-            }
-            guard.lock();
-            process();
-            guard.unlock();
+    this->start();
+}
+
+void raw_operation::run() {
+    while (!EXIT) {
+        signal_ready.acquire();
+        if (EXIT) {
+            break;
         }
-    });
+        guard.lock();
+        process();
+        guard.unlock();
+    }
 }
 
 void raw_operation::new_sample(const std::vector<format>& sample) {
