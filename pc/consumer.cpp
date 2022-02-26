@@ -60,9 +60,10 @@ void consumer::thread_code() {
             waveform[0][_REAL_] = static_cast<double>(d) * hamming[0];
             sampleSeg[0] = d;
             for (int i=1; i<NUM_POINTS; i++) {
-                d = buffer[(bufferPointer+i+NUM_POINTS) % NUM_POINTS];
-                waveform[i][_REAL_] = (static_cast<double>(d) - 0.97 * waveform[i-1][_REAL_]) * hamming[i];
-                sampleSeg[i] = d;
+                format d1 = buffer[(bufferPointer+i+NUM_POINTS) % NUM_POINTS];
+                format d0 = buffer[(bufferPointer+i-1+NUM_POINTS) % NUM_POINTS];
+                waveform[i][_REAL_] = (static_cast<double>(d1) - 0.97 * d0) * hamming[i];
+                sampleSeg[i] = d1;
             }
             fftw_execute(plan);
 
