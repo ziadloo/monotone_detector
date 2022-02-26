@@ -20,10 +20,9 @@ using namespace moodycamel;
 
 class consumer: public task {
 public:
-    consumer(shared_ptr<producer> p, int sample_rate, int num_per_points, int frames_per_frame, int smooth_window_size);
+    consumer(shared_ptr<producer> p, int sample_rate, int num_per_points);
     double amplitude(fftw_complex const result) const;
     double magnitude(fftw_complex const result) const;
-    double smooth_signal(double arr[]) const;
     void stop() override;
 
     std::vector<operation*> operations;
@@ -34,9 +33,6 @@ protected:
 
 private:
     int NUM_POINTS;
-    int FRAMES_PER_FRAME;
-    int SMOOTH_WINDOW_SIZE;
-    vector<double> reference_spectrum;
     shared_ptr<producer> pro;
 };
 

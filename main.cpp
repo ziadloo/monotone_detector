@@ -16,9 +16,6 @@
 using namespace moodycamel;
 using namespace std;
 
-typedef std::chrono::high_resolution_clock Time;
-typedef std::chrono::duration<float> fsec;
-
 shared_ptr<producer> producer_pointer;
 shared_ptr<consumer> consumer_pointer;
 
@@ -28,8 +25,7 @@ int main( int argc, char* argv[] )
     qRegisterMetaType<vector_double>("vector_double");
 
     producer_pointer = make_shared<producer>(_SAMPLE_RATE_);
-    consumer_pointer = make_shared<consumer>(producer_pointer, _SAMPLE_RATE_, _NUM_POINTS_, _SAMPLES_PER_FRAME_,
-                                             _SMOOTH_WINDOW_SIZE_);
+    consumer_pointer = make_shared<consumer>(producer_pointer, _SAMPLE_RATE_, _NUM_POINTS_);
 
     auto detector = noise_detector(_NUM_POINTS_);
     auto saver = buffer_and_save();
