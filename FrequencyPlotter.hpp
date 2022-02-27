@@ -27,6 +27,7 @@ class FrequencyPlotter : public QObject {
 public:
     FrequencyPlotter() {
         plot = new QwtPlot();
+        plot->setWindowTitle("Monotone Detector");
         plot->setCanvasBackground( Qt::white );
         plot->setAxisScale( QwtAxis::XBottom, 0.0, static_cast<double>(_SAMPLE_RATE_/2) );
         plot->setAxisScale( QwtAxis::YLeft, _PLOT_MIN_Y_, _PLOT_MAX_Y_ );

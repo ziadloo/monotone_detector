@@ -39,8 +39,8 @@ int main( int argc, char* argv[] )
     QObject::connect(&detector, SIGNAL(onNewSample(vector_double, vector_double, vector_double)), &saver, SLOT(set_vectors(vector_double, vector_double, vector_double)));
 
     int r = 0;
+    QApplication app( argc, argv );
     if (argc == 1 || string(argv[1]) != "--no-gui") {
-        QApplication app( argc, argv );
 
         FrequencyPlotter plotter;
 
@@ -65,7 +65,7 @@ int main( int argc, char* argv[] )
         sigIntHandler.sa_flags = 0;
         sigaction(SIGINT, &sigIntHandler, NULL);
 
-        pause();
+        r = app.exec();
     }
 
     return r;
